@@ -8,6 +8,7 @@ class ApiService {
         if (!resp.ok) {
             Logger.debug(`Request failed of ${resp.statusText}`);
             Logger.debug(resp.status);
+            console.log(resp);
             throw new Error('Request failed');
         }
         return resp.json();

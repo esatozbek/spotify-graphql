@@ -18,8 +18,10 @@ import {
 import { SPOTIFY_API } from './constants';
 
 export class SpotifyDataSource extends DataSource {
+    private _offset: number;
     constructor() {
         super();
+        this._offset = 0;
     }
 
     get headers() {
@@ -114,6 +116,30 @@ export class SpotifyDataSource extends DataSource {
             displayName: resp.display_name,
         };
     }
+
+    async mePlaylists(): Promise<Playlist[]> {
+        const resp = await this.get(`${SPOTIFY_API}/me/playlists`, {
+            limit: '50',
+            offset: String(this._offset),
+        });
+        this._offset += 50;
+        console.log(resp.items.length);
+        return resp.items;
+    }
+
+    async meTracks(offset: number): Promise<TrackResp> {
+        const resp = await this.get(`${SPOTIFY_API}/me/tracks`, {
+            limit: '50',
+            offset: String(offset),
+        });
+        return resp;
+    }
 }
+
+type TrackResp = {
+    items: { added_at: string; track: Track }[];
+    next: string | null;
+    total: number;
+};
 
 export default new SpotifyDataSource();

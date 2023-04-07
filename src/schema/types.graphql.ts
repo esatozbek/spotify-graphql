@@ -4,6 +4,8 @@ export default `
         playlists(query: String): [Playlist]
         track(id: String): Track
         live(liveId: Int): Live
+        mePlaylists: [Playlist]
+        meTracks: [Track]
     }
 
     type Mutation {
